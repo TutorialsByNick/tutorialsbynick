@@ -91,7 +91,7 @@ $ nasm -f bin boot.asm boot.bin
 Then we start qemu with this file:
 
 {% highlight console %}
-$ qemu-system-x86_64 -fda boot.bin
+$ qemu-system-x86_64 boot.bin
 {% endhighlight %}
 
 * `qemu-system-x86_64` is used because we want to use the version of qemu that provides a 64-bit computer
