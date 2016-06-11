@@ -23,30 +23,36 @@ Github or email me.
 
 # Requirements
 
-This tutorial assumes that you already have a Linux installation. If you don't
-you can still follow along by [installing Ubuntu in a virtual machine]
+This tutorial assumes that you already have a Debian-based Linux installation. However, the main part that shouldn't change much between other Linux distributions except for the method of installing. If you don't
+you can still follow along by [installing Ubuntu in a virtual machine]. 
 
-You'll need `nasm`, `build-essentials`, and `qemu`.
+You'll need `nasm`, `build-essential`, and `qemu`.
 
 {% highlight console %}
-$ sudo apt-get install nasm build-essentials qemu
+$ sudo apt-get install nasm build-essential qemu
 {% endhighlight %}
 
 * `nasm` is an assembler, which translates assembly code into binary code that the
-  computer can directly execute, unlike code that involves _actual_ words.
-* `build-essentials` installs many programs and compilers required for building other
+  computer can directly execute
+* `build-essential` installs many programs and compilers required for building other
   programs. We will use `make` mostly to automate building the operating system
-  and running it.
+  and running it
 * `qemu` is an easy to use virtual machine that emulates a computer, so that we
   don't have to accidentally screw up our computer or reboot constantly to
   develop our operating system. We can test the code out directly on the virtual
-  machine that the qemu software provides.
+  machine that the qemu software provides
 
 # The Booting Process
 
-When a computer is first powered on, it loads the BIOS (Basic Input Output System) from a special permanent flash memory chip on the motherboard. It functions as a rudimentary library that can access and modify hardware on the computer. The BIOS also performs a POST (Power On Self Test) check to make sure that all systems are running fine. It then locates the MBR (Master Boot Record, also known as boot sector) which is 512 bytes long and always found at the very start of the bootable media like a hard drive, floppy, dvd, or usb drive. After finding it, the BIOS executes the code in the MBR in Real Mode. Real Mode makes the processor use 16-bits even if the processor is 32-bits or 64-bits because of legacy reasons. This mode can only access 1MB of memory because of the smaller bit size. For our purposes, Real Mode is fine because it's the only mode which allows us to use BIOS functions and we don't have much code.
-
+When a computer is first powered on, it starts up in a processor mode called Real Mode. This mode is a legacy left over from when we used 16-bit computers and forces the processor to use 16-bits while it's in that mode.
 A byte is 8 bits, which are numbers that can be either 1 or 0 and are encoded as binary numbers. For example: 10010101 is a byte. Computers use bits and bytes to deal with instructions and data because that format is analogous to off and on. A computer is basically an incredibly dense electronics circuit, so using binary to program it works out well to map most directly to the hardware.
+This mode can't access much RAM memory because the smaller amount of bits means a
+smaller amount of available numbers for addresses to use when accessing the ram.
+Most computers today which are 32-bit or 64-bit can access at least 4GB of RAM memory, while most 16-bit
+computers accessed 1MB worth of RAM.
+For our purposes, Real Mode is fine because it's the only mode which allows us to use BIOS functions and we're going to use relatively simple code. 
+
+After the computer powers on, it loads the BIOS (Basic Input Output System) from a special permanent flash memory chip on the motherboard in Real Mode. the BIOS functions as a rudimentary library that can access and modify hardware on the computer. The BIOS also performs a POST (Power On Self Test) check to make sure that all systems are running fine. It then locates the MBR (Master Boot Record, also known as boot sector) which is 512 bytes long and always found at the very start of the bootable media like a hard drive, floppy, dvd, or usb drive. After finding it, the BIOS executes the code in the MBR in Real Mode. 
 
 The MBR has many functions located inside it. It can hold the locations and information of different partitions for the hard drive and it also holds the code that the computer executes. Because the MBR is only 512 bytes and most operating systems don't fit into that size (Linux and Windows contain millions of lines of code), many operating systems use a bootloader that can load the operating system kernal code from different filesystems and execute it, while finishing the set up of the computer.
 
@@ -65,7 +71,7 @@ hang:
 
     times 510-($-$$) db 0
 
-	; Anything after a semicolon on that line is a comment
+	; This is a comment
 
     db 0x55
     db 0xAA
@@ -74,14 +80,18 @@ hang:
 * `hang:` is just a named marker in the code
 * `jmp hang` means jump to the hang marker
 	* This makes an infinte loop
-* `times 510-($-$$) db 0` is nasm syntax for fill the rest of the bytes up with zeroes
-	* We don't use `512` because the two `db` commands afterward store two bytes at the end
+* `times 510-($-$$) db 0` is NASM syntax for fill the rest of the remaining bytes up with zeroes
+	* We don't use `512` to fill up the rest of the MBR's 512 bytes because the two `db` commands afterward store two bytes at the end
+* Anything that follows a `;` is a comment and is disregarded by the assembler
+  when assembling the source code file
 * `0x55` and `0xAA` are 'magic bytes' that tell the BIOS, "Yes, this is a executable MBR"
+
+As you can see, the assembly code is generally executed sequentially except for parts where instructions jump to other pieces of code.
 
 Enter this into the command line to assemble the file into a binary file that the computer can actually execute:
 
 {% highlight console %}
-$ nasm -f bin boot.asm boot.bin
+$ nasm -f bin boot.asm -o boot.bin
 {% endhighlight %}
 
 * `-f bin` ensures that nasm assembles it into the binary format instead of something like elf which is used for general purpose programs in Linux
@@ -113,13 +123,13 @@ First, let's make a file named `Makefile` and put this into it:
 
 {% highlight make linenos %}
 boot.bin:
-    nasm -f bin boot.asm -o boot.bin
+	nasm -f bin boot.asm -o boot.bin
 
 qemu: boot.bin
-    qemu-system-x86_64 boot.bin
+	qemu-system-x86_64 boot.bin
 
 clean:
-    rm *.bin
+	rm *.bin
 {% endhighlight %}
 
 The values before the colons are names for the list of commands that come afterwards. This way you can type `make clean` and `make` will execute `rm *.bin` for you, which removes all of the assembled files.
@@ -198,19 +208,20 @@ from other general purpose registers.
 # What is a segment?
 
 Segmentation is a special feature of Real Mode, which Intel made to keep their
-16-bit processor, and allow users to be able to access more memory. When a computer is 16-bit, only 16-bits are used in the addressing
-lines, which call data storage devices with an addresses to get certain values stored
-there. Because computers use binary, a 16-bit addressing scheme would mean that there are only 2^16
-available slots in which to store a byte. Those crafty Intel developers
+16-bit processor, and allow users to be able to access more memory. Traditionally when a computer is 16-bit, only 16-bits are used in the addressing
+lines, which call data storage devices with an addresses (in binary) to get certain values stored
+at the address in the storage device. Because computers use binary, a 16-bit addressing scheme would mean that there are only 2^16 available slots in which to store a byte. This equates to 64KB of RAM memory. Those crafty Intel developers
 implemented segementation to allow the computer to access 20 bits worth of
-addressing space. 
+addressing space which is 2^20 addresses or 1MB worth of memory. 
 
 However, this comes at a cost of using the segmentation
 feature. To keep 16-bit compatibility, the processor has to use two registers to
 store the _segment_ and the _offset_. The register that holds the segment is
-multiplied by `0x10`, which is what we humans use), to add another zero to the end of the hex number. Multiplying by `0x10` translates to adding four zeros to the end of the number in binary. This means that the 16 bit number is now 20 bits!
+multiplied by `0x10` (16 in the decimal format, which is what we use to count), to add another zero to the end of the hex number. Multiplying by `0x10` translates to adding four zeros to the end of the number in binary. This means that the 16 bit number is now 20 bits!
 The offset is then added to the segment address to get the actual location.
 So, when the offset is added to the segment, the address can change those four zero bits at the end to any number to access all the addresses in a 20-bit address space.
+
+A helpful way to visualize this by dividing 1MB or 1024KB by 16. This gives us 64KB and shows us that with segements, we can set the segement to any address in the processor to access the RAM in 64KB blocks with the offset being able to access any address inside those blocks of 64KB.
 
 A segmented address is generally referred to in this format
 `segment:offset`. 
@@ -259,7 +270,7 @@ mov si, msg
 mov ah, 0x0E
 {% endhighlight %}
 
-In the first line, we move the address of our message we want to print into the
+In the first line, we move the pointer to the address of our message we want to print into the
 `si` register. We use `si` because the `lodsb` instruction uses the
 segemented address `ds:si` to load a byte from that location.
 
@@ -288,9 +299,7 @@ The `lodsb` instruction loads a byte from the segmented address `ds:si` and move
   register onto the next byte. We want to load bytes from the `msg:`
   location because that's where our characters for the message we want to
   print are stored. Conveniently
-  enough, each byte can store one English letter or some punctuation under the
-  ASCII standard (American Standard Code for Information
-  Interchange).
+  enough, the ASCII standard (American Standard Code for Information Interchange), gives us a standardized list of numbers that correspond English letters and punctuation.
 
 `or al, al` performs an `or` of the `al` register against itself. An OR
 instruction compares each bit of the first operand against the
@@ -391,6 +400,10 @@ you'd like to learn more.
 
 *Useful Information for Extending Our Operating System*
 
+* [Assembly
+  Registers](http://www.tutorialspoint.com/assembly_programming/assembly_registers.htm) - A useful and easy tutorial for learning more about registers used in the processor
+* [Guide to x86
+  Assembly](http://www.cs.virginia.edu/~evans/cs216/guides/x86.html) - More essential information for continuing this operating system in assembly
 * [Bare Bones - OSDev Wiki](http://wiki.osdev.org/Bare_Bones) - This goes over
   using C or C++ to make your operating system kernel and boot it under an
   already made bootloader like GRUB, but like the article title says, this is not a hand-holding tutorial
