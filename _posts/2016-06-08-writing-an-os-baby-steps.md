@@ -1,6 +1,7 @@
 ---
 layout: post
 title: "Writing an OS: Baby Steps"
+comments: true
 ---
 
 ![Baby Steps]
