@@ -276,9 +276,9 @@ In the first line, we move the pointer to the address of our message we want to 
 `si` register. We use `si` because the `lodsb` instruction uses the
 segemented address `ds:si` to load a byte from that location.
 
-`mov ah, 0x0E` uses the `ah` register again. It tells the `0x10` interrupt we
-use in the loop to allow us to utilize the interrupt for printing characters to
-the screen. This is referred to as teletype output because it emulates the
+`mov ah, 0x0E` uses the `ah` register again. `0x0E` in the register `ah` lets us
+use the `0x10` interrupt for printing characters to the screen.
+This is referred to as teletype output because it emulates the
 functionality of a teletypewriter, which is similar to how a typewriter
 operates, but able to send the text to a computer or printer.
 
@@ -297,11 +297,11 @@ print_character_loop:
     jmp print_character_loop
 {% endhighlight %}
 
-The `lodsb` instruction loads a byte from the segmented address `ds:si` and moves the `si`
-  register onto the next byte. We want to load bytes from the `msg:`
-  location because that's where our characters for the message we want to
-  print are stored. Conveniently
-  enough, the ASCII standard (American Standard Code for Information Interchange), gives us a standardized list of numbers that correspond English letters and punctuation.
+The `lodsb` instruction loads a byte into register `al` from the segmented address `ds:si` and moves the `si`
+register onto the next byte. We want to load bytes from the `msg:`
+location because that's where our characters for the message we want to
+print are stored. Conveniently
+enough, the ASCII standard (American Standard Code for Information Interchange), gives us a standardized list of numbers that correspond English letters and punctuation.
 
 `or al, al` performs an `or` of the `al` register against itself. An OR
 instruction compares each bit of the first operand against the
@@ -323,6 +323,11 @@ Our final destination operand is `111`.
 The string terminates with a NULL character, which is a zero byte in binary
 under the ASCII standard. A `0` compared against a `0` would be a zero.
 So we use the `or` instruction to check if the string has ended. 
+
+You may have noticed that we use the `al` register even after we "modified" it
+with the `or` instruction. This works because when bits the bits being `or`'d
+are the same, the result that is stored in the first operand is also the same.
+So `or al, al` is equivalent to just setting the zero flag if the byte in the `al` register is zero.
 
 {% highlight nasm linenos %}
     or al, al
@@ -371,15 +376,16 @@ msg:
 The `db` command says store these values at the `msg:` address. What the comma
 means is also store these decimal numbers as bytes too.
 
-* `10` translates to line feed or `\n` in ASCII. This moves our cursor to
-  the next line
 * `13` translates to carriage return or `\r` in ASCII. This moves our cursor to the
   start of the line
+* `10` translates to line feed or `\n` in ASCII. This moves our cursor to
+  the next line
 * `0` tells our program that this is the end of the string
 
 _(Thanks @beernuts in the comments for the correction!)_
 
-Both of these values are legacies left over from teletypewriters.
+Both `\n` and `\r` are legacy values left over from teletypewriters that we
+still use today.
 
 This operating system we made wasn't _that_ terrible when we broke it up, right?
 Programming an OS is not something to be taken lightly (we haven't even gotten
