@@ -370,11 +370,13 @@ msg:
 The `db` command says store these values at the `msg:` address. What the comma
 means is also store these decimal numbers as bytes too.
 
-* `13` translates to carriage return or `\n` in ASCII. This moves our cursor to
+* `10` translates to line feed or `\n` in ASCII. This moves our cursor to
   the next line
-* `10` translates to new line or `\r` in ASCII. This moves our cursor to the
+* `13` translates to carriage return or `\r` in ASCII. This moves our cursor to the
   start of the line
 * `0` tells our program that this is the end of the string
+
+_(Thanks @beernuts in the comments for the correction!)_
 
 Both of these values are legacies left over from teletypewriters.
 
