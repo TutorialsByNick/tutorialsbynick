@@ -261,7 +261,7 @@ operation of the BIOS functions are usually
 just chosen without rhyme or reason, so don't be afraid to look up information
 about the BIOS interrupt you're using online.
 
-* `0x0` in register `ah` refers to setting the video mode and size. In the second line, we use
+* `0x0` in register `ah` refers to setting the video mode and size.
 * `0x3` in register `al` tells `int 0x10` that the video size should be 80 characters by 25
 characters.
 
