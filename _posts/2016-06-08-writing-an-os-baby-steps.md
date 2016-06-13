@@ -26,7 +26,7 @@ Github or email me.
 
 This tutorial assumes that you already have a Debian-based Linux installation. However, the main part that shouldn't change much between other Linux distributions except for the method of installing. If you don't
 you can still follow along by [installing Ubuntu in a virtual machine] or by
-using [Michali Sarris's comment](http://tutorialsbynick.com/writing-an-os-baby-steps/#comment-2728097897)
+using [Michali Sarris's comment](http://tutorialsbynick.com/writing-an-os-baby-steps/#comment-2728097897) to use Docker Toolbox.
 
 You'll need `nasm`, `build-essential`, and `qemu`.
 
