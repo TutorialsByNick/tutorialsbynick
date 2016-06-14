@@ -83,6 +83,9 @@ hang:
 * `jmp hang` means jump to the hang marker
 	* This makes an infinte loop
 * `times 510-($-$$) db 0` is NASM syntax for fill the rest of the remaining bytes up with zeroes
+    * `$` means start of the current line
+    * `$$` references the start of the file/section
+    * `($-$$)` means subtract the current location from the beginning of the file
 	* We don't use `512` to fill up the rest of the MBR's 512 bytes because the two `db` commands afterward store two bytes at the end
 * Anything that follows a `;` is a comment and is disregarded by the assembler
   when assembling the source code file
@@ -448,6 +451,6 @@ This is a good theory tutorial on how bootloaders work
 [Baby Steps]: {{ site.url }}/images/babysteps/book.jpg
 [What About Bob?]: http://www.imdb.com/title/tt0103241/
 [OSDev wiki]: http://wiki.osdev.org/Babystep1
-[make an issue]: https://github.com/TutorialsByNick/TutorialsByNick.github.io/issues
+[make an issue]: https://github.com/TutorialsByNick/tutorialsbynick/issues/new
 [installing Ubuntu in a virtual machine]: {% post_url 2016-05-25-how-to-install-ubuntu-in-a-virtual-machine-on-windows %}
 [Qemu Step One]: {{ site.url }}/images/babysteps/qemu-step-one.png
