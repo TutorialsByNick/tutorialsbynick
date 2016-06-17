@@ -1,19 +1,52 @@
 /**
  * Site header
  */
+.float-left {
+    padding: 10px;
+    float: left;
+    width: 45%;
+    @include media-query($on-palm) {
+        float: left;
+        width: 100%;
+        text-align: center;
+    }
+}
+.guide-image{
+    width: 175px;
+    display: block;
+    margin: 0 auto;
+}
+.intro {
+    padding-bottom: 40px;
+}
+.intro-above {
+    padding-top: 30px;
+}
+.clear {
+    clear: both;
+}
+h1, h2, h3, h4, h5, h6 {
+    font-weight: bold;
+    font-family: 'Lato', sans-serif;
+}
+.center {
+    text-align: center;
+}
 .site-header {
-    border-top: 5px solid $grey-color-dark;
+    font-family: 'Lato', sans-serif;
+    border-top: 6px solid $grey-color-dark;
     border-bottom: 1px solid $grey-color-light;
-    min-height: 56px;
+    min-height: 80px;
 
     // Positioning context for the mobile navigation icon
     position: relative;
+
 }
 
 .site-title {
     font-size: 26px;
-    font-weight: 300;
-    line-height: 56px;
+    font-weight: bold;
+    line-height: 80px;
     letter-spacing: -1px;
     margin-bottom: 0;
     float: left;
@@ -22,11 +55,26 @@
     &:visited {
         color: $grey-color-dark;
     }
+
+    @include media-query($on-palm) {
+        float: left;
+        width: 100%;
+        text-align: center;
+    }
+}
+
+.site-title:link {
+    text-decoration: none;
+}
+
+.site-title:hover {
+    color: #0074D9;
 }
 
 .site-nav {
     float: right;
-    line-height: 56px;
+    line-height: 80px;
+    font-size: 16px;
 
     .menu-icon {
         display: none;
@@ -35,60 +83,26 @@
     .page-link {
         color: $text-color;
         line-height: $base-line-height;
+        text-transform: uppercase;
+        text-decoration: none;
 
         // Gaps between nav items, but not on the last one
         &:not(:last-child) {
             margin-right: 20px;
         }
     }
+    .page-link:hover {
+        color: #0074D9;
+        padding-bottom: 1px;
+        //border-bottom: 2px solid $grey-color-dark;
+        border-bottom: 2px solid #0074D9;
+    }
 
     @include media-query($on-palm) {
-        position: absolute;
-        top: 9px;
-        right: $spacing-unit / 2;
-        background-color: $background-color;
-        border: 1px solid $grey-color-light;
-        border-radius: 5px;
-        text-align: right;
-
-        .menu-icon {
-            display: block;
-            float: right;
-            width: 36px;
-            height: 26px;
-            line-height: 0;
-            padding-top: 10px;
-            text-align: center;
-
-            > svg {
-                width: 18px;
-                height: 15px;
-
-                path {
-                    fill: $grey-color-dark;
-                }
-            }
-        }
-
-        .trigger {
-            clear: both;
-            display: none;
-        }
-
-        &:hover .trigger {
-            display: block;
-            padding-bottom: 5px;
-        }
-
-        .page-link {
-            display: block;
-            padding: 5px 10px;
-
-            &:not(:last-child) {
-                margin-right: 0;
-            }
-            margin-left: 20px;
-        }
+        border-top: 1px solid $grey-color-light;
+        float: left;
+        text-align: center;
+        width: 100%;
     }
 }
 
@@ -185,8 +199,21 @@
 }
 
 .post-meta {
+    padding-top: 20px;
     font-size: $small-font-size;
     color: $grey-color;
+}
+
+.author:link {
+    text-decoration: none;
+    color: $grey-color;
+}
+.author:visited {
+    color: $grey-color;
+}
+.author:hover {
+    color: #0074D9;
+    text-decoration: underline;
 }
 
 .post-link {
@@ -199,11 +226,20 @@
 /**
  * Posts
  */
+
 .post-header {
+    padding-bottom: 10px;
+    padding-top: 30px;
+    margin-bottom: $spacing-unit;
+}
+.page-header {
+    padding-top: 30px;
     margin-bottom: $spacing-unit;
 }
 
-.post-title {
+.post-title, .page-title {
+    font-weight: bold;
+    font-family: 'Lato', sans-serif;
     font-size: 42px;
     letter-spacing: -1px;
     line-height: 1;
@@ -211,6 +247,16 @@
     @include media-query($on-laptop) {
         font-size: 36px;
     }
+}
+
+.page-title {
+    text-align: center;
+}
+.post-title {
+    padding-bottom: 10px;
+}
+.post-line {
+    border-top: 1px dotted $grey-color-dark;
 }
 
 .post-content {

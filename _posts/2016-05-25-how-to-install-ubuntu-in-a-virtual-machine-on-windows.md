@@ -2,6 +2,8 @@
 layout: post
 title: How To Install Ubuntu in a Virtual Machine on Windows
 comments: true
+author: Nicholas Day
+email: true
 ---
 
 This tutorial will teach you how to install Ubuntu Linux in a virtual machine on Windows. This is a good way to start setting up a programming development environment because many developer tools and programs are hard to install on Windows or only run on a Linux like Ubuntu. VirtualBox is a program that emulates a computer, so that you can install different operating systems onto the virtual computer. Ubuntu is a Linux distribution that is easy to use and configure which makes it ideal for a beginner to use. When you combine these two technologies together, you get an accessible way to develop programs on Windows without the hassle of downloading and installing Linux on your real non-virtualized computer.

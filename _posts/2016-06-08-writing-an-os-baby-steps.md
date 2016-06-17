@@ -1,7 +1,9 @@
 ---
 layout: post
 title: "Writing an OS: Baby Steps"
+author: Nicholas Day
 comments: true
+email: true
 ---
 
 ![Baby Steps]
