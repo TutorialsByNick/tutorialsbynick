@@ -18,7 +18,10 @@ Most popular operating systems like OSX, Linux, or Windows contain drivers and p
 
 I attempted to explain everything as simple as possible, but if I made any errors
 or you'd like to suggest changes to my article, feel free to [make an issue] on
-Github or email me.
+Github or email me. 
+
+The source code is also available in this [Github
+repository](https://github.com/TutorialsByNick/blog-operating-system).
 
 # Table of Contents
 * TOC
