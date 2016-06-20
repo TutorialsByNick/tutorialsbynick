@@ -132,7 +132,7 @@ We'll do this with `make`, a program that is for setting up build toolchains for
 First, let's make a file named `Makefile` and put this into it:
 
 {% highlight make linenos %}
-boot.bin:
+boot.bin: boot.asm
 	nasm -f bin boot.asm -o boot.bin
 
 qemu: boot.bin
