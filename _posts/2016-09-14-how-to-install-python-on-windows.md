@@ -37,9 +37,19 @@ Once the page has loaded, you should see the following links below:
 
 Click the link which has the words `Latest Python 3 Release`.
 
-Click `Save File` because you'll want to run it later to install Python.
+This will take you to a page which has the following table:
+
+![Download table]
+
+Select `Windows x86-64 executable installer` if you have a 64-bit computer.
+
+Select `Windows x86 executable installer` if you have a 32-bit computer.
+
+A download dialog should pop up on your screen:
 
 ![Download dialog]
+
+Click `Save File` because you'll want to run it later to install Python.
 
 After it has finished downloading, select the download from the dropdown menu in
 your browser to start installing Python.
@@ -90,3 +100,4 @@ comments what you're using Python for!
 [Install now]: {{ site.url }}/images/python-installation/select-install-now.jpg
 [Python installing window]: {{ site.url }}/images/python-installation/python-installing-window.jpg
 [Python installation finished]: {{ site.url }}/images/python-installation/python-installation-finished.jpg
+[Download table]: {{ site.url }}/images/python-installation/download-table.jpg
