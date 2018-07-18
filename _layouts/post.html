@@ -16,6 +16,27 @@ layout: default
   <div class="post-content" itemprop="articleBody">
     {{ content }}
 
+
+    {% if page.category %}
+
+  <h4>Check out other posts in this series</h4>
+
+  <ul>
+
+  {% assign sorted = site.categories[page.category] | reverse %}
+  {% for post in sorted %}
+      <li>
+          <a href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
+      </li>
+    {% endfor %}
+  </ul>
+
+  {% endif %}
+
+
+
+
+
 {% if page.email %}
 {% include email.html %}
 {% endif %}

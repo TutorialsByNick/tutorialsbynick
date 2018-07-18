@@ -1,0 +1,23 @@
+---
+layout: default
+---
+
+<div class="home">
+
+  <h2>{{ page.title }}</h2>
+
+  <ul>
+
+
+{% assign sorted = site.categories[page.category] | reverse %}
+{% for post in sorted %}
+
+      <li>
+          <a href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
+      </li>
+    {% endfor %}
+  </ul>
+
+  <p class="rss-subscribe" style="padding-top: 20px">subscribe <a href="{{ "/feed.xml" | prepend: site.baseurl }}">via RSS</a></p>
+
+</div>

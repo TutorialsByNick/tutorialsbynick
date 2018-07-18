@@ -4,7 +4,23 @@ layout: default
 
 <div class="home">
 
-  <h1 class="page-heading">Posts</h1>
+  {% for category in site.categories %}
+  <h2>{{ category[0] }}</h2>
+
+  <ul>
+
+  {% assign sorted = category[1] | reverse %}
+  {% for post in sorted %}
+      <li>
+          <a href="{{ post.url | prepend: site.baseurl }}">{{ post.title }}</a>
+      </li>
+    {% endfor %}
+  </ul>
+  {% endfor %}
+
+  <hr style="margin-top: 40px;" />
+
+  <h2 style="padding-top: 40px;">All Articles by Date</h2>
 
   <ul class="post-list">
     {% for post in site.posts %}
